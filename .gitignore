@@ -1,0 +1,16 @@
+ntelliJ
+.idea/
+*.iml
+*.eml
+
+# MacBook
+.DS_Store
+
+# Maven
+**/target/
+/target
+.classpath
+.settings
+/.project
+
+data/*_annotated.txt

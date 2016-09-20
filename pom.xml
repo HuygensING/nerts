@@ -1,0 +1,85 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>nl.knaw.huygens.pergamon</groupId>
+  <artifactId>nerts</artifactId>
+  <version>0.1-SNAPSHOT</version>
+  <name>NERTS</name>
+  <description>A named entity recognition tool set</description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jdk.version>1.8</jdk.version>
+    <guava.version>19.0</guava.version>                 <!-- Latest; checked 2016-09-26 -->
+    <junit.version>4.12</junit.version>                 <!-- Latest; checked 2016-09-26 -->
+    <visitei.version>0.6.3-SNAPSHOT</visitei.version>   <!-- Latest; checked 2016-09-29 -->
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>Huygens</id>
+      <name>Huygens repository</name>
+      <url>http://maven.huygens.knaw.nl/repository/</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <!-- MAIN - HUYGENS ING -->
+    <dependency>
+      <groupId>nl.knaw.huygens</groupId>
+      <artifactId>visitei</artifactId>
+      <version>${visitei.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>nl.knaw.huygens</groupId>
+          <artifactId>log</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- MAIN - OTHER -->
+    <dependency>
+      <groupId>net.sf.opencsv</groupId>
+      <artifactId>opencsv</artifactId>
+      <version>2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
+    </dependency>
+
+    <!-- TEST -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>${jdk.version}</source>
+          <target>${jdk.version}</target>
+          <encoding>UTF-8</encoding>
+          <showDeprecation>true</showDeprecation>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>nl.knaw.huygens.pergamon.nerts.App</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
