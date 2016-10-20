@@ -14,12 +14,8 @@ public class DictionaryMatcher implements Matcher {
 
   private final Pattern pattern;
 
-  public DictionaryMatcher(Set<String> names, boolean customTokenizer) {
-    pattern = buildRE(names);
-  }
-
   public DictionaryMatcher(Set<String> names) {
-    this(names, false);
+    pattern = buildRE(names);
   }
 
   private Pattern buildRE(Set<String> names) {
@@ -30,11 +26,10 @@ public class DictionaryMatcher implements Matcher {
     sb.append("\\b(?:");
 
     // Sort by reverse length to get longest match behavior.
-    names.stream().sorted(Comparator.comparingInt(name -> -name.length()))
-         .forEach(name -> {
-           sb.append(Pattern.quote(name));
-           sb.append('|');
-         });
+    names.stream().sorted(Comparator.comparingInt(name -> -name.length())).forEach(name -> {
+      sb.append(Pattern.quote(name));
+      sb.append('|');
+    });
     sb.deleteCharAt(sb.length() - 1); // Last '|' causes RE to match empty string.
     sb.append(")\\b");
     return Pattern.compile(sb.toString());

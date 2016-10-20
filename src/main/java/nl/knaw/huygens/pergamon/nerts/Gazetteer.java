@@ -1,12 +1,5 @@
 package nl.knaw.huygens.pergamon.nerts;
 
-import com.google.common.collect.Table;
-import com.google.common.collect.TreeBasedTable;
-import nl.knaw.huygens.pergamon.nerts.text.DiacriticsFilter;
-import nl.knaw.huygens.pergamon.nerts.text.NERTextNormalizer;
-import nl.knaw.huygens.pergamon.nerts.text.NameLinkFilter;
-import nl.knaw.huygens.pergamon.support.file.CSVImporter;
-
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +7,14 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import com.google.common.collect.Table;
+import com.google.common.collect.TreeBasedTable;
+
+import nl.knaw.huygens.pergamon.nerts.text.DiacriticsFilter;
+import nl.knaw.huygens.pergamon.nerts.text.NERTextNormalizer;
+import nl.knaw.huygens.pergamon.nerts.text.NameLinkFilter;
+import nl.knaw.huygens.pergamon.support.file.CSVImporter;
 
 /**
  * A collection of names for Named Entity Recognition.
@@ -85,7 +86,7 @@ public class Gazetteer implements Matcher {
   }
 
   public Gazetteer buildMatcher(int minCount) {
-    matcher = new DictionaryMatcher(getNames(minCount), false);
+    matcher = new DictionaryMatcher(getNames(minCount));
     return this;
   }
 
