@@ -5,6 +5,8 @@ import java.util.List;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
+import nl.knaw.huygens.pergamon.nerts.matcher.Match;
+
 /**
  * Add 'tags' around text fragments indicated by matches.
  * Fragments defined as exceptions will not be annotated.

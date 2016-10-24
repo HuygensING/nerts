@@ -11,6 +11,10 @@ import java.util.stream.Collectors;
 import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
 
+import nl.knaw.huygens.pergamon.nerts.matcher.Match;
+import nl.knaw.huygens.pergamon.nerts.matcher.Matcher;
+import nl.knaw.huygens.pergamon.nerts.matcher.MatcherFactory;
+import nl.knaw.huygens.pergamon.nerts.matcher.MatcherType;
 import nl.knaw.huygens.pergamon.nerts.text.DiacriticsFilter;
 import nl.knaw.huygens.pergamon.nerts.text.NERTextNormalizer;
 import nl.knaw.huygens.pergamon.nerts.text.NameLinkFilter;
@@ -85,8 +89,9 @@ public class Gazetteer implements Matcher {
     return key.isEmpty() ? (type + "|?") : (type + "|" + key);
   }
 
-  public Gazetteer buildMatcher(int minCount) {
-    matcher = new DictionaryMatcher(getNames(minCount));
+  public Gazetteer buildMatcher(MatcherType matcherType, int minCount) {
+    Set<String> names = getNames(minCount);
+    matcher = new MatcherFactory(matcherType).getMatcher(names);
     return this;
   }
 

@@ -3,6 +3,7 @@ package nl.knaw.huygens.pergamon.nerts;
 import java.io.File;
 import java.util.function.Function;
 
+import nl.knaw.huygens.pergamon.nerts.matcher.MatcherType;
 import nl.knaw.huygens.pergamon.nerts.tool.TeiAnnotator;
 import nl.knaw.huygens.pergamon.support.process.Pipeline;
 import nl.knaw.huygens.pergamon.support.process.Task;
@@ -18,6 +19,7 @@ public class Benchmark implements Task {
     Pipeline.execute(new Benchmark("persName", "placeName"));
   }
 
+  private static final MatcherType MATCHER_TYPE = MatcherType.AHO_CORASICK_MATCHER;
   private static final int MIN_COUNT = 3;
 
   private final String[] elementNames;
@@ -43,7 +45,7 @@ public class Benchmark implements Task {
   private Gazetteer getGazetteer(int minCount) throws Exception {
     NamedEntities entities = new NamedEntities().withDefaultNameNormalizer();
     entities.readFromFile(getNamedEntitiesFile());
-    return entities.buildGazetteer().buildMatcher(minCount);
+    return entities.buildGazetteer().buildMatcher(MATCHER_TYPE, minCount);
   }
 
   private File getNamedEntitiesFile() {

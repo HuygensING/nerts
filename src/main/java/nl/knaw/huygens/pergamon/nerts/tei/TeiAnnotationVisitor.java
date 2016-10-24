@@ -3,9 +3,9 @@ package nl.knaw.huygens.pergamon.nerts.tei;
 import java.util.List;
 import java.util.function.Predicate;
 
-import nl.knaw.huygens.pergamon.nerts.Match;
-import nl.knaw.huygens.pergamon.nerts.Matcher;
 import nl.knaw.huygens.pergamon.nerts.TextAnnotator;
+import nl.knaw.huygens.pergamon.nerts.matcher.Match;
+import nl.knaw.huygens.pergamon.nerts.matcher.Matcher;
 import nl.knaw.huygens.pergamon.support.tei.ElementFilter;
 import nl.knaw.huygens.pergamon.support.tei.TeiUtils;
 import nl.knaw.huygens.tei.DelegatingVisitor;

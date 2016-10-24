@@ -1,4 +1,4 @@
-package nl.knaw.huygens.pergamon.nerts;
+package nl.knaw.huygens.pergamon.nerts.matcher;
 
 import java.util.List;
 

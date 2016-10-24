@@ -1,10 +1,16 @@
 package nl.knaw.huygens.pergamon.nerts.tool;
 
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
+
 import nl.knaw.huygens.pergamon.nerts.Gazetteer;
 import nl.knaw.huygens.pergamon.nerts.NamedEntities;
 import nl.knaw.huygens.pergamon.nerts.TextAnnotator;
 import nl.knaw.huygens.pergamon.nerts.lang.LanguageAssignerVisitor;
 import nl.knaw.huygens.pergamon.nerts.lang.LanguageIdentifier;
+import nl.knaw.huygens.pergamon.nerts.matcher.MatcherType;
 import nl.knaw.huygens.pergamon.nerts.tei.AttributeRemover;
 import nl.knaw.huygens.pergamon.nerts.tei.TeiAnnotationVisitor;
 import nl.knaw.huygens.pergamon.nerts.tei.TeiNameCollector;
@@ -16,11 +22,6 @@ import nl.knaw.huygens.pergamon.support.tei.Documents;
 import nl.knaw.huygens.pergamon.support.tei.export.ExportVisitor;
 import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.Element;
-
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
 
 /**
  * NER annotation tool that processes XML-documents.
@@ -95,8 +96,7 @@ public class TeiAnnotator implements UnaryOperator<String> {
       }
       document = convertNameTags(document);
       document.accept(new TeiNameIdentifier(gazetteer, hasNoKeysAttribute, ELEMENT_NAME));
-      document.accept(new TeiNameResolver(ident -> ident.getScore() >= 0.1,
-        Optional.ofNullable(teiAnnotatorName), ELEMENT_NAME));
+      document.accept(new TeiNameResolver(ident -> ident.getScore() >= 0.1, Optional.ofNullable(teiAnnotatorName), ELEMENT_NAME));
       return ExportVisitor.export(document);
     } catch (Exception e) {
       e.printStackTrace();
@@ -112,7 +112,7 @@ public class TeiAnnotator implements UnaryOperator<String> {
     } else {
       NamedEntities entities = new NamedEntities();
       document.accept(new TeiNameCollector(entities, elementNames));
-      return entities.buildGazetteer().buildMatcher(1);
+      return entities.buildGazetteer().buildMatcher(MatcherType.AHO_CORASICK_MATCHER, 1);
     }
   }
 

@@ -1,4 +1,4 @@
-package nl.knaw.huygens.pergamon.nerts;
+package nl.knaw.huygens.pergamon.nerts.matcher;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,14 +7,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-public class DictionaryMatcher implements Matcher {
-
-  private static final String CHUNK_TYPE = "name";
-  private static final double CHUNK_SCORE = 1.0;
+/**
+ * DictionaryMatcher that uses regular expressions.
+ */
+class REDictionaryMatcher implements Matcher {
 
   private final Pattern pattern;
 
-  public DictionaryMatcher(Set<String> names) {
+  public REDictionaryMatcher(Set<String> names) {
     pattern = buildRE(names);
   }
 
@@ -43,7 +43,7 @@ public class DictionaryMatcher implements Matcher {
     java.util.regex.Matcher matcher = pattern.matcher(text);
     List<Match> result = new ArrayList<>();
     while (matcher.find()) {
-      result.add(new Match(matcher.start(), matcher.end(), CHUNK_TYPE, CHUNK_SCORE));
+      result.add(new Match(matcher.start(), matcher.end()));
     }
     return result;
   }

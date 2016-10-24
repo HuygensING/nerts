@@ -1,6 +1,6 @@
 package nl.knaw.huygens.pergamon.nerts;
 
-import nl.knaw.huygens.pergamon.support.file.CSVImporter;
+import static java.util.Comparator.comparing;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import static java.util.Comparator.comparing;
+import nl.knaw.huygens.pergamon.support.file.CSVImporter;
 
 /**
  * A collection of named entities.
@@ -74,8 +74,7 @@ public class NamedEntities {
   }
 
   private void forEachEntrySorted(BiConsumer<NamedEntity, Integer> consumer) {
-    entities.entrySet().parallelStream().sorted(comparing(Map.Entry::getKey))
-            .forEachOrdered(x -> consumer.accept(x.getKey(), x.getValue()));
+    entities.entrySet().parallelStream().sorted(comparing(Map.Entry::getKey)).forEachOrdered(x -> consumer.accept(x.getKey(), x.getValue()));
   }
 
   private static final String FORMAT = "\"%s\";\"%s\";\"%s\";\"%d\"%n";
