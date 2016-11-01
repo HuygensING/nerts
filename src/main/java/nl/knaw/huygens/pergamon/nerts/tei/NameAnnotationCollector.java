@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 
 import nl.knaw.huygens.pergamon.nerts.NamedEntityAnnotation;
 import nl.knaw.huygens.pergamon.support.tei.Attributes;
+import nl.knaw.huygens.pergamon.support.tei.export.ExportTextHandler;
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.Element;
 import nl.knaw.huygens.tei.Traversal;
@@ -21,14 +22,21 @@ public class NameAnnotationCollector extends DelegatingVisitor<XmlContext> {
   private final List<NamedEntityAnnotation> annotations;
   private final Predicate<Element> predicate;
 
-  public NameAnnotationCollector(List<NamedEntityAnnotation> annotations, String elementName, Predicate<Element> predicate) {
+  public NameAnnotationCollector(List<NamedEntityAnnotation> annotations, String refXmlId, String elementName, Predicate<Element> predicate) {
     super(new XmlContext());
+    setTextHandler(new ExportTextHandler<XmlContext>());
+    addElementHandler(new NameHandler(refXmlId), elementName);
     this.annotations = annotations;
     this.predicate = predicate;
-    addElementHandler(new NameHandler(), elementName);
   }
 
   private class NameHandler extends DefaultElementHandler<XmlContext> {
+    private final String refXmlId;
+
+    public NameHandler(String refXmlId) {
+      this.refXmlId = refXmlId;
+    }
+
     @Override
     public Traversal enterElement(Element element, XmlContext context) {
       if (predicate.test(element)) {
@@ -36,6 +44,7 @@ public class NameAnnotationCollector extends DelegatingVisitor<XmlContext> {
         annotation.setType(element.getName());
         annotation.setKey(element.getAttribute(Attributes.KEY, "?"));
         annotation.setResp(element.getAttribute(Attributes.RESP, "?"));
+        annotation.setRefXmlId(refXmlId);
         annotation.setBeginPos(context.getLayerLength());
         stack.push(annotation);
       }
@@ -47,6 +56,8 @@ public class NameAnnotationCollector extends DelegatingVisitor<XmlContext> {
       if (predicate.test(element)) {
         NamedEntityAnnotation annotation = stack.pop();
         annotation.setEndPos(context.getLayerLength());
+        // somewhat inefficient
+        annotation.setName(context.getResult().substring(annotation.getBeginPos(), annotation.getEndPos()));
         annotations.add(annotation);
       }
       return Traversal.NEXT;
