@@ -26,11 +26,11 @@ TeiAnnotator annotator = new TeiAnnotator().withGazetteer(gazetteer);
 ```
 Now, when applying the annotator to the text
 ```
-<text>Hello, may name is John!</text>
+<text>Hello, my name is John!</text>
 ```
 you will get
 ```
-<text>Hello, may name is <persName key="id-john">John</persName>!</text>
+<text>Hello, my name is <persName key="id-john">John</persName>!</text>
 ```
 
 
