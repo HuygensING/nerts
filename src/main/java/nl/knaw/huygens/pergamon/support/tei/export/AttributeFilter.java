@@ -1,17 +1,17 @@
 package nl.knaw.huygens.pergamon.support.tei.export;
 
-import nl.knaw.huygens.pergamon.support.tei.Attributes;
-import nl.knaw.huygens.tei.Element;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
+
+import nl.knaw.huygens.pergamon.support.tei.Attributes;
+import nl.knaw.huygens.tei.Element;
 
 /**
  * Orders the attributes of a TEI element.
  */
-public class AttributeFilter implements Function<Element, Element> {
+public class AttributeFilter implements UnaryOperator<Element> {
 
   private final boolean keepOthers;
   private final List<String> keysInOrder;

@@ -1,16 +1,19 @@
 package nl.knaw.huygens.pergamon.support.tei.export;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.UnaryOperator;
+
 import nl.knaw.huygens.tei.Element;
 import nl.knaw.huygens.tei.ElementHandler;
 import nl.knaw.huygens.tei.Traversal;
 import nl.knaw.huygens.tei.XmlContext;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class ExportElementHandler implements ElementHandler<XmlContext> {
 
-  private final Map<String, AttributeFilter> filters;
+  private static final UnaryOperator<Element> IDENTITY = UnaryOperator.identity();
+
+  private final Map<String, UnaryOperator<Element>> filters;
 
   public ExportElementHandler() {
     filters = new HashMap<>();
@@ -24,8 +27,7 @@ public class ExportElementHandler implements ElementHandler<XmlContext> {
   }
 
   private Element filterAttributes(Element element) {
-    AttributeFilter filter = filters.get(element.getName());
-    return (filter != null) ? filter.apply(element) : element;
+    return filters.getOrDefault(element.getName(), IDENTITY).apply(element);
   }
 
   @Override
