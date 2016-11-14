@@ -7,8 +7,11 @@ import java.io.PrintWriter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+
+import com.google.common.collect.Lists;
 
 import nl.knaw.huygens.pergamon.support.file.CSVImporter;
 
@@ -20,9 +23,11 @@ public class NamedEntities {
   private static final int MIN_ALPHA_CHARS = 2;
 
   private static final Function<String, String> DEFAULT_NORMALIZER = String::trim;
+  private static final NameGenerator DEFAULT_GENERATOR = Lists::newArrayList;
 
   private final Map<NamedEntity, Integer> entities;
   private Function<String, String> normalizer;
+  private NameGenerator nameGenerator;
 
   /**
    * Creates a {@code NamedEntities} instance.
@@ -30,6 +35,7 @@ public class NamedEntities {
   public NamedEntities() {
     entities = new HashMap<>();
     normalizer = DEFAULT_NORMALIZER;
+    nameGenerator = DEFAULT_GENERATOR;
   }
 
   /**
@@ -47,18 +53,24 @@ public class NamedEntities {
     return withNameNormalizer(DEFAULT_NORMALIZER);
   }
 
+  public NamedEntities withNameGenerator(NameGenerator generator) {
+    nameGenerator = Objects.requireNonNull(generator);
+    return this;
+  }
+
   /**
    * Creates a named entity and adds it to this entities.
    */
-  public void add(String name, String type, String id, int count) {
-    if (name.chars().filter(Character::isAlphabetic).count() < MIN_ALPHA_CHARS) {
-      System.out.printf("Rejected %s '%s'%n", type, name);
+  public void add(String text, String type, String id, int count) {
+    if (text.chars().filter(Character::isAlphabetic).count() < MIN_ALPHA_CHARS) {
+      System.out.printf("Rejected %s '%s'%n", type, text);
     } else {
-      if (id == null || id.isEmpty()) {
-        id = "?";
-      }
-      NamedEntity key = new NamedEntity(normalizer.apply(name), type, id);
-      entities.put(key, entities.getOrDefault(key, 0) + count);
+      String normalizedId = (id == null || id.isEmpty()) ? "?" : id;
+      String normalizedText = normalizer.apply(text);
+      nameGenerator.apply(normalizedText).forEach(name -> {
+        NamedEntity key = new NamedEntity(name, type, normalizedId);
+        entities.put(key, entities.getOrDefault(key, 0) + count);
+      });
     }
   }
 
