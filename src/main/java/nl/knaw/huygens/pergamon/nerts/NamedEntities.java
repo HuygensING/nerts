@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import com.google.common.collect.Lists;
 
@@ -17,16 +17,18 @@ import nl.knaw.huygens.pergamon.support.file.CSVImporter;
 
 /**
  * A collection of named entities.
+ *
+ * Allows customization by specifying a name normalizer and a name generator;
  */
 public class NamedEntities {
 
   private static final int MIN_ALPHA_CHARS = 2;
 
-  private static final Function<String, String> DEFAULT_NORMALIZER = String::trim;
+  private static final UnaryOperator<String> DEFAULT_NORMALIZER = String::trim;
   private static final NameGenerator DEFAULT_GENERATOR = Lists::newArrayList;
 
   private final Map<NamedEntity, Integer> entities;
-  private Function<String, String> normalizer;
+  private UnaryOperator<String> nameNormalizer;
   private NameGenerator nameGenerator;
 
   /**
@@ -34,15 +36,15 @@ public class NamedEntities {
    */
   public NamedEntities() {
     entities = new HashMap<>();
-    normalizer = DEFAULT_NORMALIZER;
+    nameNormalizer = DEFAULT_NORMALIZER;
     nameGenerator = DEFAULT_GENERATOR;
   }
 
   /**
    * Sets the specified name normalizer.
    */
-  public NamedEntities withNameNormalizer(Function<String, String> normalizer) {
-    this.normalizer = normalizer;
+  public NamedEntities withNameNormalizer(UnaryOperator<String> normalizer) {
+    nameNormalizer = Objects.requireNonNull(normalizer);
     return this;
   }
 
@@ -53,6 +55,9 @@ public class NamedEntities {
     return withNameNormalizer(DEFAULT_NORMALIZER);
   }
 
+  /**
+   * Sets the specified name generator.
+   */
   public NamedEntities withNameGenerator(NameGenerator generator) {
     nameGenerator = Objects.requireNonNull(generator);
     return this;
@@ -60,13 +65,14 @@ public class NamedEntities {
 
   /**
    * Creates a named entity and adds it to this entities.
+   * Note that the name normalizer is applied before the name generator.
    */
   public void add(String text, String type, String id, int count) {
     if (text.chars().filter(Character::isAlphabetic).count() < MIN_ALPHA_CHARS) {
       System.out.printf("Rejected %s '%s'%n", type, text);
     } else {
       String normalizedId = (id == null || id.isEmpty()) ? "?" : id;
-      String normalizedText = normalizer.apply(text);
+      String normalizedText = nameNormalizer.apply(text);
       nameGenerator.apply(normalizedText).forEach(name -> {
         NamedEntity key = new NamedEntity(name, type, normalizedId);
         entities.put(key, entities.getOrDefault(key, 0) + count);
