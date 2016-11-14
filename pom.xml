@@ -11,7 +11,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jdk.version>1.8</jdk.version>
     <ahocorasick.version>0.3.0</ahocorasick.version>    <!-- Latest; checked 2016-10-24 -->
-    <guava.version>19.0</guava.version>                 <!-- Latest; checked 2016-09-26 -->
+    <guava.version>20.0</guava.version>                 <!-- Latest; checked 2016-11-14 -->
     <junit.version>4.12</junit.version>                 <!-- Latest; checked 2016-09-26 -->
     <visitei.version>0.6.3-SNAPSHOT</visitei.version>   <!-- Latest; checked 2016-09-29 -->
   </properties>
