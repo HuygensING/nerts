@@ -14,7 +14,7 @@ public class TeiNameCollector extends DelegatingVisitor<XmlContext> {
   private static final String KEY_ATTRIBUTE = "key";
 
   /**
-   * Constructs a {@code TeiNameCollector2} instance.
+   * Constructs a {@code TeiNameCollector} instance.
    * @param entities the collection to add named entities to.
    * @param elementNames the elements of which the text is added.
    */
