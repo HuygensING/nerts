@@ -51,6 +51,15 @@ public class TeiUtils {
     }
   }
 
+  /**
+   * Set the responsibility to the specified value if the element has none.
+   */
+  public static void ensureResponsibility(Element element, String value) {
+    if (getResponsibility(element).isEmpty()) {
+      element.setAttribute(Attributes.RESP, nameRef(value));
+    }
+  }
+
   public static void appendResponsibility(Element element, Optional<String> annotator) {
     if (annotator.isPresent()) {
       setResponsibility(element, getResponsibility(element) + " " + nameRef(annotator.get()));

@@ -46,6 +46,15 @@ public class TeiUtilsTest {
   }
 
   @Test
+  public void testEnsureResponsibility() {
+    Element element = new Element("name");
+    TeiUtils.ensureResponsibility(element, "ed1");
+    Assert.assertEquals("#ed1", TeiUtils.getResponsibility(element));
+    TeiUtils.ensureResponsibility(element, "ed2");
+    Assert.assertEquals("#ed1", TeiUtils.getResponsibility(element));
+  }
+
+  @Test
   public void testAppendResponsibilityWithAnnotator() {
     Element element = new Element("name");
     TeiUtils.appendResponsibility(element, Optional.empty());
