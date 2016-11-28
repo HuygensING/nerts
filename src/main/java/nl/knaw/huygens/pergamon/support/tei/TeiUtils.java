@@ -1,5 +1,6 @@
 package nl.knaw.huygens.pergamon.support.tei;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import nl.knaw.huygens.tei.Element;
@@ -74,16 +75,17 @@ public class TeiUtils {
 
   /**
    * Returns the nearest ancestor with the specified name,
-   * or {@code null} if no such element exists.
+   * if such an element exists.
    */
-  public static Element getAncestor(Element element, String name) {
+  public static Optional<Element> getAncestor(Element element, String name) {
+    element = element.getParent();
     while (element != null) {
       if (element.hasName(name)) {
-        return element;
+        return Optional.of(element);
       }
       element = element.getParent();
     }
-    return null;
+    return Optional.empty();
   }
 
   /**
@@ -91,7 +93,22 @@ public class TeiUtils {
    * with the specified name, {@code false} otherwise.
    */
   public static boolean hasAncestor(Element element, String name) {
-    return getAncestor(element, name) != null;
+    return getAncestor(element, name).isPresent();
+  }
+
+  /**
+   * Returns {@code true} if the specified element has an ancestor
+   * with one of the specified names, {@code false} otherwise.
+   */
+  public static boolean hasAncestor(Element element, Collection<String> names) {
+    element = element.getParent();
+    while (element != null) {
+      if (names.contains(element.getName())) {
+        return true;
+      }
+      element = element.getParent();
+    }
+    return false;
   }
 
   /**

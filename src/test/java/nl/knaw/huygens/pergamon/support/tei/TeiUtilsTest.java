@@ -65,4 +65,17 @@ public class TeiUtilsTest {
     Assert.assertEquals("#ed1 #ed2", TeiUtils.getResponsibility(element));
   }
 
+  @Test(expected = NullPointerException.class)
+  public void testHasAncestorWithNullElement() {
+    TeiUtils.hasAncestor(null, "name");
+  }
+
+  @Test
+  public void testHasAncestor() {
+    Element element = new Element("name");
+    Assert.assertFalse(TeiUtils.hasAncestor(element, "name"));
+    element.setParent(new Element("name"));
+    Assert.assertTrue(TeiUtils.hasAncestor(element, "name"));
+  }
+
 }
