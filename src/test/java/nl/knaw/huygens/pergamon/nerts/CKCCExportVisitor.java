@@ -3,12 +3,12 @@ package nl.knaw.huygens.pergamon.nerts;
 import java.util.List;
 
 import nl.knaw.huygens.pergamon.support.tei.Documents;
-import nl.knaw.huygens.pergamon.support.tei.TeiException;
 import nl.knaw.huygens.pergamon.support.tei.export.AttributeFilter;
 import nl.knaw.huygens.pergamon.support.tei.export.ExportElementHandler;
 import nl.knaw.huygens.pergamon.support.tei.export.ExportVisitor;
 import nl.knaw.huygens.tei.Document;
 import nl.knaw.huygens.tei.Element;
+import nl.knaw.huygens.tei.TeiException;
 
 public class CKCCExportVisitor extends ExportVisitor {
 
