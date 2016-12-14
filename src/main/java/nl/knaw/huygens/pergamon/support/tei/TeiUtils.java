@@ -14,7 +14,8 @@ public class TeiUtils {
    * Sets the @xml:id of the specified element to a normalized value.
    */
   public static void setNormalizedXmlIdAttribute(Element element, int number) {
-    element.setAttribute(Attributes.ATTR_XML_ID, String.format("%s-%d", element.getName(), number));
+    String value = String.format("%s-%d", element.getName(), number);
+    element.setAttribute(Attributes.ATTR_XML_ID, value);
   }
 
   public static String getIdAttribute(Element element) {

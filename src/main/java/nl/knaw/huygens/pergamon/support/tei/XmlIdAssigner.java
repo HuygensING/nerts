@@ -1,5 +1,8 @@
 package nl.knaw.huygens.pergamon.support.tei;
 
+import java.util.Arrays;
+import java.util.List;
+
 import nl.knaw.huygens.tei.DelegatingVisitor;
 import nl.knaw.huygens.tei.Element;
 import nl.knaw.huygens.tei.Traversal;
@@ -12,12 +15,16 @@ import nl.knaw.huygens.tei.handlers.DefaultElementHandler;
  */
 public class XmlIdAssigner extends DelegatingVisitor<XmlContext> {
 
-  public XmlIdAssigner(String... elementNames) {
+  public XmlIdAssigner(List<String> elementNames) {
     super(new XmlContext());
     for (String elementName : elementNames) {
       // Each element must have its own sequence
       addElementHandler(new XmlIdHandler(), elementName);
     }
+  }
+
+  public XmlIdAssigner(String... elementNames) {
+    this(Arrays.asList(elementNames));
   }
 
   private static class XmlIdHandler extends DefaultElementHandler<XmlContext> {
