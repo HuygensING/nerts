@@ -1,9 +1,10 @@
 package nl.knaw.huygens.pergamon.support.tei.export;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.function.UnaryOperator;
+
+import com.google.common.collect.Lists;
 
 import nl.knaw.huygens.pergamon.support.tei.Attributes;
 import nl.knaw.huygens.tei.Element;
@@ -18,9 +19,9 @@ public class AttributeFilter implements UnaryOperator<Element> {
 
   public AttributeFilter(boolean keepOthers, String... keys) {
     this.keepOthers = keepOthers;
-    keysInOrder = new ArrayList<>();
+    keysInOrder = Lists.newArrayList(Attributes.ATTR_XML_ID, Attributes.ATTR_ID, Attributes.ATTR_XML_LANG);
     for (String key : keys) {
-      if (key.equals(Attributes.ATTR_ID) || key.equals(Attributes.ATTR_XML_ID)) {
+      if (keysInOrder.contains(key)) {
         throw new IllegalArgumentException("Invalid key: " + key);
       }
       keysInOrder.add(key);
@@ -33,24 +34,19 @@ public class AttributeFilter implements UnaryOperator<Element> {
 
   @Override
   public Element apply(Element element) {
-    if (keysInOrder.isEmpty()) {
-      return element;
-    } else {
-      Element ordered = new Element(element.getName(), new LinkedHashMap<>());
-      ordered.copyAttributeFrom(element, Attributes.ATTR_XML_ID);
-      ordered.copyAttributeFrom(element, Attributes.ATTR_ID);
-      for (String key : keysInOrder) {
-        ordered.copyAttributeFrom(element, key);
-      }
-      if (keepOthers) {
-        for (String key : element.getAttributeNames()) {
-          if (!ordered.hasAttribute(key)) {
-            ordered.copyAttributeFrom(element, key);
-          }
+    Element ordered = new Element(element.getName(), new LinkedHashMap<>());
+    for (String key : keysInOrder) {
+      // Copy attribute if it exists
+      ordered.copyAttributeFrom(element, key);
+    }
+    if (keepOthers) {
+      for (String key : element.getAttributeNames()) {
+        if (!ordered.hasAttribute(key)) {
+          ordered.copyAttributeFrom(element, key);
         }
       }
-      return ordered;
     }
+    return ordered;
   }
 
 }

@@ -7,6 +7,9 @@ public class Attributes {
   public static final String ATTR_ID = "id";
   public static final String ATTR_XML_ID = XML_NS + ATTR_ID;
 
+  public static final String ATTR_LANG = "lang";
+  public static final String ATTR_XML_LANG = XML_NS + ATTR_LANG;
+
   public static final String KEY = "key";
   public static final String KEYS = "keys";
 
